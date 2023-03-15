@@ -1,7 +1,7 @@
-Philadelphia, Pittsburgh
-Boston, New York
-Hartford, New York
-Los Angeles, SanDiego
-New York, Croton-Harmon
-St. Petersburg, Tampa
-New York, Istanbul
+Philadelphia, Pittsburgh, 0, 0
+Boston, New York, 0, 1
+Hartford, New York, 0, 1
+Los Angeles, SanDiego, 0, 0
+New York, Croton-Harmon, 0, 0
+St. Petersburg, Tampa, 0, 0
+New York, Istanbul, 0, 0

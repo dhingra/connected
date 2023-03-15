@@ -18,7 +18,7 @@ import com.bgc.poc.pattern.Builder;
  *
  * @author rohitdhingra
  */
-public class DirectedGraph<T, N extends Number> {
+public class Graph<T, N extends Number> {
 
     private boolean isWeightedGraph;
     private final WeightagePredicate predicate;
@@ -30,7 +30,7 @@ public class DirectedGraph<T, N extends Number> {
      *
      * @param builder
      */
-    private DirectedGraph(DirectedGraphBuilder builder) {
+    private Graph(DirectedGraphBuilder builder) {
         this.isWeightedGraph = builder.isWeightedGraph;
         predicate = new WeightagePredicate();
         verticesMap = new HashMap<>();
@@ -51,14 +51,9 @@ public class DirectedGraph<T, N extends Number> {
         edges.stream().filter(edge -> predicate.test(edge.getWeight(),isWeightedGraph)).forEach(edge -> {
             final Vertex<T> sourceVertex =  edge.getSourceVertex();
             final Vertex<T> destinationVertex =  edge.getDestinationVertex();
-
-            /** biild vertices map. **/
-            if(!verticesMap.containsKey(sourceVertex.toString())){
-                verticesMap.put(sourceVertex.toString(),sourceVertex);
-            }
-            if(!verticesMap.containsKey(destinationVertex.toString())){
-                verticesMap.put(destinationVertex.toString(),destinationVertex);
-            }
+            /** build vertices map. **/
+            verticesMap.putIfAbsent(sourceVertex.toString(), sourceVertex);
+            verticesMap.putIfAbsent(destinationVertex.toString(), destinationVertex);
 
             /** build adjacency network **/
             final Set<Vertex<T>> adjacentVertexSet;
@@ -69,7 +64,16 @@ public class DirectedGraph<T, N extends Number> {
             }
             adjacentVertexSet.add(edge.getDestinationVertex());
             adjacencyMap.put(edge.getSourceVertex().toString(), adjacentVertexSet);
-
+            if(edge.isBiDirectional()){
+                final Set<Vertex<T>> adjacentVertexSet2;
+                if (adjacencyMap.containsKey(edge.getDestinationVertex().toString())) {
+                    adjacentVertexSet2 = adjacencyMap.get(edge.getDestinationVertex().toString());
+                } else {
+                    adjacentVertexSet2 = new HashSet<>();
+                }
+                adjacentVertexSet2.add(edge.getSourceVertex());
+                adjacencyMap.put(edge.getDestinationVertex().toString(), adjacentVertexSet2);
+            }
         });
     }
 
@@ -78,12 +82,10 @@ public class DirectedGraph<T, N extends Number> {
      */
     private void constructTransitiveClosure(){
         adjacencyMap.entrySet().stream().forEach(e -> {
-
             final Queue<Vertex<T>> verticesToVisit = new LinkedBlockingQueue<>();
             final HashSet<Vertex<T>> verticesVisited = new HashSet<>();
             final String currentVertex = e.getKey();
             final Set<String> transitiveSet = new HashSet<>();
-            //verticesVisited.add(verticesMap.get(currentVertex));
 
             e.getValue().stream().forEach(v -> transitiveSet.add(v.toString()));
             transitiveClosureMap.put(currentVertex, transitiveSet);
@@ -133,16 +135,16 @@ public class DirectedGraph<T, N extends Number> {
          * @param weight
          * @return
          */
-        public DirectedGraphBuilder<T, N> addEdge(T fromVertex, T toVertex,  N weight) {
-        	edgesList.add(new Edge<>(new Vertex<T>(fromVertex), new Vertex<T>(toVertex), weight));
+        public DirectedGraphBuilder<T, N> addEdge(T fromVertex, T toVertex,  N weight, String direction) {
+        	edgesList.add(new Edge<>(new Vertex<T>(fromVertex), new Vertex<T>(toVertex), weight, direction));
             return this;
         }
 
-        public DirectedGraph<T,N> build() {
+        public Graph<T,N> build() {
         	if(edgeLoader!= null){
-        		edgeLoader.loadEdges((vertex1, vertex2, weight) -> DirectedGraphBuilder.this.addEdge(vertex1,vertex2,weight));
+        		edgeLoader.loadEdges((vertex1, vertex2, weight, direction) -> DirectedGraphBuilder.this.addEdge(vertex1,vertex2,weight, direction));
         	}
-            return new DirectedGraph<>(this);
+            return new Graph<>(this);
         }
 
         public DirectedGraphBuilder<T, N> fromEdgeLoader(EdgeLoader<T,N> edgeLoader){

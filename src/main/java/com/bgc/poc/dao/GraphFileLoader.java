@@ -29,7 +29,7 @@ public class GraphFileLoader implements EdgeLoader<City,Integer> {
 			while (scanner.hasNext()) {
 				final String cities[] = scanner.next().split(",");
 				if (edgeFoundCallback != null)
-					edgeFoundCallback.newVertex(new City(cities[0].trim()),new City( cities[1].trim()), Integer.valueOf(0));
+					edgeFoundCallback.newVertex(new City(cities[0].trim()),new City( cities[1].trim()), Integer.valueOf(cities[2].trim()),cities[3].trim());
 			}
 			scanner.close();
 		} catch (FileNotFoundException e) {

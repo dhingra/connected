@@ -9,16 +9,19 @@ public final class Edge<T,N extends Number> {
     private final Vertex<T> destinationVertex;
     private N weight;
 
+    private boolean isBiDirectional;
+
     /**
      *
      * @param sourceVertex
      * @param destinationVertex
      * @param weight
      */
-    public Edge(final Vertex<T> sourceVertex, final Vertex<T> destinationVertex, N weight){
+    public Edge(final Vertex<T> sourceVertex, final Vertex<T> destinationVertex, N weight, String bidirectional){
         this.sourceVertex = sourceVertex;
         this.destinationVertex = destinationVertex;
         this.weight = weight;
+        this.isBiDirectional = "1".equals(bidirectional);
     }
 
     /**
@@ -39,6 +42,10 @@ public final class Edge<T,N extends Number> {
 
     public N getWeight(){
         return weight;
+    }
+
+    public boolean isBiDirectional() {
+        return isBiDirectional;
     }
 
     @Override

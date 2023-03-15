@@ -2,7 +2,7 @@ package com.bgc.poc;
 
 import com.bgc.poc.dao.GraphFileLoader;
 import com.bgc.poc.model.City;
-import com.bgc.poc.model.graph.DirectedGraph;
+import com.bgc.poc.model.graph.Graph;
 import com.bgc.poc.model.graph.Vertex;
 
 /**
@@ -15,13 +15,13 @@ import com.bgc.poc.model.graph.Vertex;
  */
 public class Connected {
 
-	private final DirectedGraph<City, Integer> graph;
+	private final Graph<City, Integer> graph;
 
 	/**
 	 * @param fileName
 	 */
 	public Connected(String fileName) {
-		this.graph = new DirectedGraph.DirectedGraphBuilder<City, Integer>()
+		this.graph = new Graph.DirectedGraphBuilder<City, Integer>()
 				.fromEdgeLoader(new GraphFileLoader(fileName)).setWeightedGraph(false).build();
 	}
 

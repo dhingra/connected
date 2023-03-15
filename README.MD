@@ -2,10 +2,10 @@
 
 ## Assumption & Design:
 ======================
-1. Connected only supports directed graph. 
-2. After graph is build ,there is no add/delete or update to underlying directed network, so it is "thread safe" in this context
+1. Connected  supports directed & undirected graph and that is driven if edge is uno or bidirectional. 
+2. After graph is build ,there is no add/delete or update to underlying Graph network, so it is "thread safe" in this context
    as Connected.isConnected() only exposed to calling API.
-3. If future requirements is to support mutation on directed network, then com.bgc.poc.model.graph.DiectedGraph.java needs to:
+3. If future requirements is to support mutation on Graph network, then com.bgc.poc.model.graph.Graph.java needs to:
    a) Make Adjacent Map & TransitiveClosure Map thread safe .
    b) Lock is required when TransitiveClosure is being re-constructed. 
    c) Re-construction of Adjacent Map & TransitiveClosure  map operation should be atomic, this is important so that another 

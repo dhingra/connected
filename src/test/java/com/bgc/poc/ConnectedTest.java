@@ -18,13 +18,20 @@ public class ConnectedTest {
     @Test
     public void isConnectedShouldReturnTrueForConnectedCities(){
         boolean isConnected1 = connected.isConnected("New York","Istanbul");
-        assertEquals(true,isConnected1 ); // assert New York and Istanbul are connected
+        assertEquals(true, isConnected1 ); // assert New York and Istanbul are connected
+    }
+
+    @Test
+    public void isConnectedShouldReturnTrueForConnectedCities2(){
+        boolean isConnected = connected.isConnected("Boston","Hartford");
+        System.out.println("Boston & Hartford is connected >> " + isConnected);
+        assertEquals(true, isConnected ); // assert Boston and Hartford are connected
     }
 
     @Test
     public void isConnectedShouldReturnFalseForNotConnectedCities(){
-
-        boolean isConnected = connected.isConnected("New York","Lima");
+        boolean isConnected = connected.isConnected("Boston","Tampa");
+        System.out.println("Boston & Tampa is connected >> " + isConnected);
         assertEquals(false,isConnected);
     }    
 
