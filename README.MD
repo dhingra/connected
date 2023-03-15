@@ -1,4 +1,4 @@
-# Connected: Is a JAVA VM implementation for a *Directed* graph network. 
+# Connected: Is a JAVA VM implementation for a *Directed/Undirected* graph network. 
 
 ## Assumption & Design:
 ======================
